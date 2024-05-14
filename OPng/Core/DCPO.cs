@@ -18,6 +18,11 @@ public sealed class DCPO<T> : IEnumerable<T>
 
     public void AddBefore(T @base, T prev)
     {
+        if (@base.Equals(prev))
+        {
+            return;
+        }
+
         if (!_nodes.TryGetValue(@base, out List<T>? previousNodes))
         {
             previousNodes = [];
