@@ -35,5 +35,16 @@ public sealed class DCPO<T> : IEnumerable<T>
     public IEnumerator<T> GetEnumerator() => new DCPOEnumerator<T>(this);
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 
-    public IEnumerable<T> this[T @base] => _nodes[@base];
+    public IEnumerable<T> this[T @base]
+    {
+        get
+        {
+            if (!_nodes.TryGetValue(@base, out List<T>? coveredElements))
+            {
+                return [];
+            }
+
+            return coveredElements;
+        }
+    }
 }

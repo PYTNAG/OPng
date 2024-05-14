@@ -2,9 +2,9 @@ using System.Collections;
 
 namespace OPng.Core;
 
-public sealed class DCPOEnumerator<T>(DCPO<T> dcpo) : IEnumerator<T> where T : notnull
+public sealed class DCPOEnumerator<T> : IEnumerator<T> where T : notnull
 {
-    private readonly DCPO<T> _dcpo = dcpo;
+    private readonly DCPO<T> _dcpo;
 
     private readonly HashSet<T> _checkedNodes = [];
     private readonly Stack<T> _nodesToCheck = [];
@@ -13,9 +13,15 @@ public sealed class DCPOEnumerator<T>(DCPO<T> dcpo) : IEnumerator<T> where T : n
     public T Current => _current!;
     object IEnumerator.Current => _current!;
 
+    public DCPOEnumerator(DCPO<T> dcpo)
+    {
+        _dcpo = dcpo;
+        Reset();
+    }
+
     public void Dispose()
     {
-        throw new NotImplementedException();
+        
     }
 
     public bool MoveNext()
@@ -26,6 +32,7 @@ public sealed class DCPOEnumerator<T>(DCPO<T> dcpo) : IEnumerator<T> where T : n
         }
 
         _current = IterateNext(node);
+        _checkedNodes.Add(_current);
         return true;
     }
 
